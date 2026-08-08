@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construi-AI | Simulador de Arquitetura</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#071a16,#0d2d26 55%,#123d32);color:#f5fff9;min-height:100vh}
+header{padding:28px 18px;text-align:center;border-bottom:1px solid #ffffff18;background:#061510cc}
+.logo{font-size:32px;font-weight:800}.logo span{color:#66e3a6}
+.subtitle{margin:8px auto 0;max-width:760px;color:#c8ddd4;line-height:1.5}
+.container{max-width:1100px;margin:auto;padding:24px 16px 50px}.grid{display:grid;grid-template-columns:380px 1fr;gap:20px}
+.card{background:#0b211bcc;border:1px solid #ffffff16;border-radius:20px;padding:20px;box-shadow:0 14px 40px #00000025}
+h2{margin-top:0;font-size:20px}label{display:block;margin:14px 0 7px;color:#cfe3da;font-size:14px}
+input,select,textarea{width:100%;padding:12px 13px;border-radius:11px;border:1px solid #ffffff20;background:#071713;color:white;outline:none;font-size:15px}
+input:focus,select:focus,textarea:focus{border-color:#66e3a6}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.check{display:flex;align-items:center;gap:7px;background:#071713;padding:10px;border-radius:10px;color:#d6e8e0;font-size:14px;margin:0}
+.check input{width:auto}button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#66e3a6;color:#062017;font-size:16px;font-weight:800;cursor:pointer}
+button:hover{filter:brightness(1.08)}.result{min-height:500px}.welcome{display:flex;align-items:center;justify-content:center;text-align:center;min-height:450px;color:#b9cec5}.hidden{display:none}
+.badge{display:inline-block;background:#66e3a61c;color:#79efb1;border:1px solid #66e3a638;padding:6px 10px;border-radius:999px;font-size:12px}
+.summary{margin:14px 0;padding:15px;border-radius:13px;background:#071713;line-height:1.65;color:#d9e9e2}
+.rooms{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.room{padding:13px;border-radius:12px;background:#102d25;border:1px solid #ffffff12}
+.room b{display:block;color:#79efb1;margin-bottom:5px}.plan{margin-top:18px;background:#f1eee6;border-radius:16px;padding:14px;color:#17201d;overflow:hidden}
+.plan-title{text-align:center;font-weight:800;margin-bottom:10px}.plan-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:58px;border:3px solid #17201d;max-width:680px;margin:auto}
+.cell{border:1px solid #17201d;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;font-size:11px;font-weight:700}
+.span1{grid-column:span 1}.span2{grid-column:span 2}.span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}
+.note{font-size:12px;color:#9eb4aa;margin-top:12px;line-height:1.5}footer{text-align:center;color:#8fa89d;font-size:12px;padding:20px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.rooms{grid-template-columns:1fr}.plan-grid{grid-auto-rows:52px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🏠 Construi-<span>AI</span></div>
+<div class="subtitle">IA de simulação conceitual de construção e arquitetura, criada para transformar ideias, medidas e croquis em possíveis propostas de projeto.</div>
+</header>
+<div class="container"><div class="grid">
+<section class="card">
+<h2>📐 Dados do projeto</h2>
+<label>Nome do projeto</label><input id="nome" placeholder="Ex.: Casa dos Sonhos">
+<label>Medidas do terreno (metros)</label><div class="row"><input id="largura" type="number" min="1" placeholder="Largura"><input id="comprimento" type="number" min="1" placeholder="Comprimento"></div>
+<label>Área aproximada da casa (m²)</label><input id="area" type="number" min="20" placeholder="Ex.: 150">
+<label>Número de quartos</label><input id="quartos" type="number" min="0" max="10" value="3">
+<label>Número de banheiros</label><input id="banheiros" type="number" min="1" max="10" value="2">
+<label>Estilo</label><select id="estilo"><option>Moderno</option><option>Contemporâneo</option><option>Minimalista</option><option>Rústico</option><option>Clássico</option></select>
+<label>Ambientes desejados</label>
+<div class="checks">
+<label class="check"><input type="checkbox" id="cozinha" checked> Cozinha</label>
+<label class="check"><input type="checkbox" id="sala" checked> Sala</label>
+<label class="check"><input type="checkbox" id="suite"> Suíte</label>
+<label class="check"><input type="checkbox" id="piscina"> Piscina</label>
+<label class="check"><input type="checkbox" id="gourmet"> Área gourmet</label>
+<label class="check"><input type="checkbox" id="lavanderia"> Lavanderia</label>
+<label class="check"><input type="checkbox" id="garagem"> Garagem</label>
+<label class="check"><input type="checkbox" id="jardim"> Jardim</label>
+</div>
+<label>Observações / ideia do cliente</label><textarea id="obs" rows="4" placeholder="Ex.: Quero conceito aberto, bastante iluminação natural e integração com a piscina."></textarea>
+<button onclick="simular()">✨ Simular projeto</button>
+</section>
+
+<section class="card result">
+<div id="welcome" class="welcome"><div><div style="font-size:54px">🏗️</div><h2>Seu projeto começa aqui</h2><p>Preencha os dados ao lado e clique em <b>Simular projeto</b>.</p></div></div>
+<div id="resultado" class="hidden">
+<span class="badge">SIMULAÇÃO CONCEITUAL</span><h2 id="titulo"></h2><div id="resumo" class="summary"></div>
+<h3>Distribuição sugerida</h3><div id="rooms" class="rooms"></div>
+<div class="plan"><div class="plan-title">Croqui conceitual simplificado</div><div id="planGrid" class="plan-grid"></div></div>
+<div class="note">⚠️ Esta é uma simulação educacional/conceitual. Não substitui projeto arquitetônico, estrutural, elétrico, hidráulico, aprovação legal ou avaliação de um profissional habilitado.</div>
+</div>
+</section>
+</div></div>
+<footer>Construi-AI • Simulador conceitual de arquitetura</footer>
+<script>
+function val(id,fallback=""){const v=document.getElementById(id).value;return v===""?fallback:v}
+function checked(id){return document.getElementById(id).checked}
+function simular(){
+const nome=val("nome","Projeto Construi-AI"),l=parseFloat(val("largura",0)),c=parseFloat(val("comprimento",0)),area=parseFloat(val("area",0)),quartos=parseInt(val("quartos",0)),banheiros=parseInt(val("banheiros",1)),estilo=val("estilo"),obs=val("obs","sem observações específicas");
+document.getElementById("welcome").classList.add("hidden");document.getElementById("resultado").classList.remove("hidden");document.getElementById("titulo").textContent=nome;
+let texto=`Proposta em estilo ${estilo.toLowerCase()}, pensada para um terreno de `;
+texto+=l&&c?`${l} × ${c} m (${(l*c).toFixed(0)} m²)`:"dimensões não informadas";
+texto+=area?`, com aproximadamente ${area} m² de área construída.`:".";texto+=` O programa considera ${quartos} quarto(s) e ${banheiros} banheiro(s). Ideia registrada: ${obs}.`;
+document.getElementById("resumo").textContent=texto;
+const rooms=[];
+if(checked("garagem"))rooms.push(["🚗 Garagem","Acesso frontal e área de manobra."]);
+if(checked("jardim"))rooms.push(["🌿 Jardim","Área verde para valorizar o terreno."]);
+rooms.push(["🚪 Entrada","Acesso principal conectado à área social."]);
+if(checked("sala"))rooms.push(["🛋️ Sala","Ambiente social integrado e iluminado."]);
+if(checked("cozinha"))rooms.push(["🍳 Cozinha","Preferencialmente integrada à sala."]);
+for(let i=1;i<=quartos;i++)rooms.push([`🛏️ Quarto ${i}`,i===1&&checked("suite")?"Suíte principal com maior privacidade.":"Dormitório com espaço para armário."]);
+for(let i=1;i<=banheiros;i++)rooms.push([`🚿 Banheiro ${i}`,"Distribuído próximo às áreas de uso."]);
+if(checked("lavanderia"))rooms.push(["🧺 Lavanderia","Área de serviço com acesso funcional."]);
+if(checked("gourmet"))rooms.push(["🔥 Área gourmet","Espaço de convivência conectado ao exterior."]);
+if(checked("piscina"))rooms.push(["🏊 Piscina","Área externa para lazer e integração."]);
+document.getElementById("rooms").innerHTML=rooms.map(r=>`<div class="room"><b>${r[0]}</b><span>${r[1]}</span></div>`).join("");
+const plan=document.getElementById("planGrid");plan.innerHTML="";
+[["Garagem","span2"],["Jardim","span4"],["Entrada","span2"],["Sala","span2"],["Cozinha","span2"],["Quarto","span2"],["Quarto","span2"],["Banheiro","span2"],["Suíte / Quarto","span3"],["Banheiro","span1"],["Lavanderia","span2"],["Área gourmet","span3"],["Piscina / Jardim","span3"]].forEach(([t,cl])=>{const d=document.createElement("div");d.className="cell "+cl;d.textContent=t;plan.appendChild(d)});
+window.scrollTo({top:document.querySelector(".result").offsetTop-15,behavior:"smooth"});
+}
+</script>
+</body></html>
