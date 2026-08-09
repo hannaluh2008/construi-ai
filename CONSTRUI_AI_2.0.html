@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Construi_AI 2.0</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#eef5f0;background:linear-gradient(135deg,#07130d,#0b1724 55%,#07110d);min-height:100vh}
+.wrap{max-width:1200px;margin:auto;padding:24px}.hero,.card{background:rgba(15,25,35,.82);border:1px solid #263b34;border-radius:24px;box-shadow:0 20px 50px #0006}.hero{padding:28px;margin-bottom:20px}.badge{display:inline-block;padding:7px 12px;border-radius:99px;background:#123b29;color:#70e3a0;font-size:13px}.hero h1{font-size:clamp(30px,5vw,54px);margin:14px 0 8px}.hero p{color:#aebdb6;max-width:720px;line-height:1.6}.layout{display:grid;grid-template-columns:360px 1fr;gap:20px}.card{padding:22px;margin-bottom:20px}.card h2,.card h3{margin-top:0}.muted{color:#98aaa2;font-size:14px;line-height:1.5}textarea,input[type=range]{width:100%}textarea{background:#071019;color:white;border:1px solid #294038;border-radius:16px;padding:14px;resize:vertical;outline:none}button{border:0;border-radius:14px;padding:13px 16px;font-weight:700;cursor:pointer}button.primary{background:#31d47c;color:#06110a}button.secondary{background:#17252d;color:white;border:1px solid #2c4149}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.response,.stat{background:#081119;border:1px solid #23352f;border-radius:16px;padding:14px;margin-top:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:15px}.control label{display:flex;justify-content:space-between;font-size:13px;color:#b9c8c1}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.check{background:#111d23;border:1px solid #273b38;border-radius:13px;padding:11px;font-size:13px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat strong{display:block;font-size:22px;margin-top:5px}.visuals{display:grid;grid-template-columns:1fr 1fr;gap:20px}.visual{height:330px;border-radius:20px;border:1px solid #294039;overflow:hidden;background:#071019}.plan{height:100%;padding:22px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:7px;background-image:linear-gradient(#ffffff0d 1px,transparent 1px),linear-gradient(90deg,#ffffff0d 1px,transparent 1px);background-size:24px 24px}.room{border:1px solid #55d99966;background:#143528cc;border-radius:10px;padding:8px;font-size:11px}.image{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;background:radial-gradient(circle at 50% 25%,#315b49,#12251e 38%,#071019 75%)}.house{font-size:75px}.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.project{padding:16px;border:1px solid #273a35;border-radius:17px;background:#0a141b}.project small{color:#7fe0a6}.note{font-size:12px;color:#778a82;margin-top:10px}
+@media(max-width:850px){.layout,.visuals{grid-template-columns:1fr}.projects{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hero{padding:20px}.wrap{padding:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<span class="badge">● Construi_AI 2.0</span>
+<h1>Seu simulador de arquitetura com IA</h1>
+<p>Descreva uma casa, ajuste medidas e ambientes e veja uma planta conceitual. Esta versão já prepara o site para uma futura integração com IA e geração de imagens reais.</p>
+</header>
+
+<div class="layout">
+<aside>
+<section class="card">
+<h2>🤖 Assistente de IA</h2>
+<p class="muted">Conte como você quer sua casa.</p>
+<textarea id="prompt" rows="7" placeholder="Ex.: Quero uma casa de 15x9 m, 3 quartos, 1 suíte master, sala e cozinha integradas, piscina e área gourmet."></textarea>
+<div class="buttons"><button class="primary" onclick="generate()">Gerar projeto</button><button class="secondary" onclick="image()">Gerar imagem</button></div>
+<div class="response" id="reply">Digite um pedido para começar.</div>
+</section>
+
+<section class="card">
+<h2>📐 Controles</h2>
+<div class="controls">
+<div class="control"><label>Terreno <b id="lv">1000 m²</b></label><input id="land" type="range" min="300" max="3000" step="50" value="1000"></div>
+<div class="control"><label>Casa <b id="bv">135 m²</b></label><input id="built" type="range" min="60" max="500" step="5" value="135"></div>
+<div class="control"><label>Quartos <b id="qv">3</b></label><input id="rooms" type="range" min="1" max="6" value="3"></div>
+<div class="control"><label>Suítes <b id="sv">1</b></label><input id="suites" type="range" min="0" max="4" value="1"></div>
+</div>
+<div class="checks">
+<label class="check"><input id="pool" type="checkbox"> 🏊 Piscina</label>
+<label class="check"><input id="gourmet" type="checkbox" checked> 🍖 Área gourmet</label>
+<label class="check"><input id="sauna" type="checkbox"> 🧖 Sauna</label>
+<label class="check"><input id="garage" type="checkbox" checked> 🚗 Garagem</label>
+</div>
+</section>
+</aside>
+
+<main>
+<section class="card">
+<h2>🏠 Painel do projeto</h2>
+<div class="stats">
+<div class="stat"><span class="muted">Área do terreno</span><strong id="sLand">1000 m²</strong></div>
+<div class="stat"><span class="muted">Área construída</span><strong id="sBuilt">135 m²</strong></div>
+<div class="stat"><span class="muted">Programa</span><strong id="sProgram">3 quartos</strong></div>
+</div>
+<div class="response" id="summary"></div>
+</section>
+
+<div class="visuals">
+<section class="card">
+<h3>📏 Planta conceitual</h3>
+<div class="visual"><div class="plan" id="plan"></div></div>
+<p class="note">Visualização conceitual — não substitui projeto técnico profissional.</p>
+</section>
+<section class="card">
+<h3>🖼️ Visualização</h3>
+<div class="visual" id="imageBox"><div class="image"><div><div class="house">🏡</div><h3>Fachada / 3D</h3><p class="muted">Clique em “Gerar imagem”.</p></div></div></div>
+<p class="note">A geração de imagem real será conectada a uma API de imagens na próxima etapa.</p>
+</section>
+</div>
+
+<section class="card">
+<h3>✨ Projetos recentes</h3>
+<div class="projects">
+<div class="project"><b>Casa Vila Solar</b><p class="muted">3 quartos, suíte e área gourmet.</p><small>142 m² • Moderna</small></div>
+<div class="project"><b>Residência Aurora</b><p class="muted">Planta integrada e varanda ampla.</p><small>118 m² • Contemporânea</small></div>
+<div class="project"><b>Projeto Horizonte</b><p class="muted">Foco em lazer e circulação fluida.</p><small>160 m² • Térrea</small></div>
+</div>
+</section>
+</main>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function update(){
+let l=+$('land').value,b=+$('built').value,q=+$('rooms').value,s=+$('suites').value;
+$('lv').textContent=l+' m²';$('bv').textContent=b+' m²';$('qv').textContent=q;$('sv').textContent=s;
+$('sLand').textContent=l+' m²';$('sBuilt').textContent=b+' m²';$('sProgram').textContent=q+' quartos';
+$('summary').innerHTML=`<b>Distribuição sugerida:</b><br>Área social integrada na entrada, quartos em uma ala reservada e área externa conectada ao lazer.<br><br><b>Extras:</b> ${$('pool').checked?'piscina, ':''}${$('gourmet').checked?'área gourmet, ':''}${$('sauna').checked?'sauna, ':''}${$('garage').checked?'garagem':''}`;
+let rooms=[['Entrada',1],['Sala',2],['Cozinha',2],['Quartos',Math.max(2,q)],['Suíte',Math.max(1,s)],['Banhos',1],['Serviço',1],['Lazer',$('pool').checked?2:0],['Gourmet',$('gourmet').checked?2:0],['Garagem',$('garage').checked?2:0]].filter(x=>x[1]);
+let html='';
+rooms.forEach(x=>html+=`<div class="room" style="grid-column:span ${Math.min(2,x[1])}">${x[0]}</div>`);
+$('plan').innerHTML=html;
+}
+function generate(){
+let p=$('prompt').value.trim();
+if(!p){$('reply').innerHTML='⚠️ Escreva uma descrição do projeto primeiro.';return}
+$('reply').innerHTML=`<b>Projeto interpretado!</b><br><br>${p.replace(/\n/g,' ').slice(0,400)}<br><br>✨ A distribuição conceitual foi atualizada com os controles abaixo.`;
+update();
+}
+function image(){
+$('imageBox').innerHTML='<div class="image"><div><div class="house">✨🏠✨</div><h3>Visualização conceitual pronta</h3><p class="muted">A área está preparada para receber uma imagem gerada por IA quando a API for conectada.</p></div></div>';
+}
+['land','built','rooms','suites','pool','gourmet','sauna','garage'].forEach(id=>$(id).addEventListener('input',update));
+['pool','gourmet','sauna','garage'].forEach(id=>$(id).addEventListener('change',update));
+update();
+</script>
+</body>
+</html>
